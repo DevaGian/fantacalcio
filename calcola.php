@@ -1,4 +1,35 @@
 <?php
+	function substituction($index,$subs)
+	{
+	 if($subs==0){	 
+		if($index == 0)
+			$info=getResult($str,$squadra,11,$form); //guarda il secondo portiere
+		elseif($index > 0 and $index <= $form['dif'])
+			$info=getResult($str,$squadra,12,$form); 
+		elseif($index > $form['dif'] and $index <= ($form['dif'] + $form['cen']))
+			$info=getResult($str,$squadra,14,$form);
+		elseif($index > $form['cen'] and $index <= ($form['cen'] + $form['att']))
+			$info=getResult($str,$squadra,16,$form);
+		elseif($index == 12)
+			$info=getResult($str,$squadra,13,$form);
+		elseif($index == 14)
+			$info=getResult($str,$squadra,15,$form);
+		elseif($index == 16)
+			$info=getResult($str,$squadra,17,$form);
+		else //se anche le seconde riserve non hanno giocato viene restituito 0
+			$info = array('vote' => 0, 'giocatore' => "nessuno");
+	 }
+	 elseif($subs=1){
+	 	if($index > 0 and $index <= $form['dif'])
+			$info=getResult($str,$squadra,13,$form); 
+		elseif($index > $form['dif'] and $index <= ($form['dif'] + $form['cen']))
+			$info=getResult($str,$squadra,15,$form);
+		elseif($index > $form['cen'] and $index <= ($form['cen'] + $form['att']))
+			$info=getResult($str,$squadra,17,$form);	
+	 }
+	 else
+	 	$info = array('vote' => 0, 'giocatore' => "nessuno");
+	}
 	function getResult($str,$squadra,$index,$form)
 	{
 		$info = array('vote' => -1, 'giocatore' => $squadra[$index]); //'vote' contiene il voto del giocatore, 'giocatore' il nome
@@ -28,14 +59,14 @@
 			else //se anche le seconde riserve non hanno giocato viene restituito 0
 				$info = array('vote' => 0, 'giocatore' => $squadra[$index]);
 		}
-		else{ //se è stato trovato un giocatore vengono eseguitle elabroazioni di sorta
-			if(is_numeric(substr($result[0][0], strlen($result[0][0])-3)) and !is_numeric(substr($result[0][0], strlen($result[0][0])-4))) //estrapola il fantavoto se è una cifra con la virgola
+		else{ //se Ã¨ stato trovato un giocatore vengono eseguitle elabroazioni di sorta
+			if(is_numeric(substr($result[0][0], strlen($result[0][0])-3)) and !is_numeric(substr($result[0][0], strlen($result[0][0])-4))) //estrapola il fantavoto se Ã¨ una cifra con la virgola
 				$info['vote'] = substr($result[0][0], strlen($result[0][0])-3);
 			elseif(is_numeric(substr($result[0][0], strlen($result[0][0])-4))) //estrapola il fantavoto se son due cifre con la virgola
 				$info['vote'] = substr($result[0][0], strlen($result[0][0])-4);
-			elseif(is_numeric(substr($result[0][0], strlen($result[0][0])-4, 2))) //estrapola il fantavoto se è intero a 2 cifre
+			elseif(is_numeric(substr($result[0][0], strlen($result[0][0])-4, 2))) //estrapola il fantavoto se Ã¨ intero a 2 cifre
 				$info['vote'] = substr($result[0][0], strlen($result[0][0])-4, 2);		
-			else															//estrapola il fantavoto se è intero ad una cifra
+			else															//estrapola il fantavoto se Ã¨ intero ad una cifra
 				$info['vote'] = substr($result[0][0], strlen($result[0][0])-3, 1);
 		}
 		return $info;
